@@ -72,7 +72,11 @@ function cleanimg() {
   return del(`${destDir}/img/**/*`, { force: true })
 }
 
-exports.build       = series(cleanimg, scripts, html, styles, images)
+function cleandest() {
+  return del(`${destDir}/**/*`, { force: true })
+}
+
+exports.build       = series(cleandest, scripts, html, styles, images)
 exports.browsersync = browsersync;
 exports.images      = images;
 exports.scripts     = scripts;
