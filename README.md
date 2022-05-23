@@ -1,1 +1,1 @@
-# fe-boilerplate
+# Boilerplate for HTML project
