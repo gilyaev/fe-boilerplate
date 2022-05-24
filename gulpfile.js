@@ -61,6 +61,11 @@ function html() {
     .pipe(browserSync.stream());
 }
 
+function fonts() {
+  return src(`${srcDir}/fonts/**/*.{ttf,woff,woff2,eot,svg}`)
+    .pipe(dest(`${destDir}/fonts`));
+}
+
 function watchFiles() {
   watch(`${srcDir}/js/**/*.js`, scripts);
   watch(`${srcDir}/*.html`, html);
@@ -76,10 +81,11 @@ function cleandest() {
   return del(`${destDir}/**/*`, { force: true })
 }
 
-exports.build       = series(cleandest, scripts, html, styles, images)
+exports.build       = series(cleandest, scripts, html, styles, images, fonts);``
 exports.browsersync = browsersync;
 exports.images      = images;
 exports.scripts     = scripts;
 exports.styles      = styles;
 exports.cleanimg    = cleanimg;
+exports.fonts       = fonts;
 exports.start       = parallel(scripts, html, styles, images, browsersync, watchFiles);

@@ -9,7 +9,8 @@
     "images": "gulp images",
     "scripts": "gulp scripts",
     "styles": "gulp styles",
-    "cleanimg": "gulp cleanimg"
+    "cleanimg": "gulp cleanimg",
+    "fonts": "gulp fonts"
   },
   "repository": {
     "type": "git",
