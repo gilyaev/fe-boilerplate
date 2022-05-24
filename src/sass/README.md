@@ -1,5 +1,6 @@
 Stores SASS files of the app.
 
+```
 sass/
 |
 |– base/
@@ -46,3 +47,4 @@ sass/
 |
 |
 `– main.scss             # Main Sass file
+```
