@@ -14,11 +14,11 @@ const del          = require('del');
 const sourcemaps   = require('gulp-sourcemaps');
 
 const srcDir = "src";
-const destDir = "build";
+const buildDir = "build";
 
 function browsersync() {
   browserSync.init({
-    server: { baseDir: `${destDir}/` },
+    server: { baseDir: `${buildDir}/` },
     notify: false,
     online: true
   });
@@ -33,7 +33,7 @@ function styles() {
     .pipe(rename({ suffix: '.min' }))
     .pipe(sourcemaps.write())
     .pipe(dest((file) => {
-      return file.base.replace(`${srcDir}/sass`, `${destDir}/css`)
+      return file.base.replace(`${srcDir}/sass`, `${buildDir}/css`)
     })) 
     .pipe(browserSync.stream());
 }
@@ -42,7 +42,7 @@ function scripts() {
   return src(`${srcDir}/js/**/*.js`)
     .pipe(uglify())
     .pipe(rename({ suffix: '.min' }))
-    .pipe(dest(`${destDir}/js`))
+    .pipe(dest(`${buildDir}/js`))
     .pipe(browserSync.stream());
 }
 
@@ -51,9 +51,9 @@ function scripts() {
  */
 function images() {
   return src(`${srcDir}/img/**/*`)
-    .pipe(newer(`${destDir}/img`))
+    .pipe(newer(`${buildDir}/img`))
     .pipe(imagemin())
-    .pipe(dest(`${destDir}/img`));
+    .pipe(dest(`${buildDir}/img`));
 }
 
 function html() {
@@ -61,15 +61,15 @@ function html() {
     .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(dest((file) => {
       return file.base
-        .replace(`${srcDir}/pages`, `${destDir}`)
-        .replace(`${srcDir}`, `${destDir}`);
+        .replace(`${srcDir}/pages`, `${buildDir}`)
+        .replace(`${srcDir}`, `${buildDir}`);
     })) 
     .pipe(browserSync.stream());
 }
 
 function fonts() {
   return src(`${srcDir}/fonts/**/*.{ttf,woff,woff2,eot,svg}`, { base: "." })
-    .pipe(dest(`${destDir}/fonts`));
+    .pipe(dest(`${buildDir}/fonts`));
 }
 
 function watchFiles() {
@@ -80,11 +80,11 @@ function watchFiles() {
 }
 
 function cleanimg() {
-  return del(`${destDir}/img/**/*`, { force: true })
+  return del(`${buildDir}/img/**/*`, { force: true })
 }
 
 function cleandest() {
-  return del(`${destDir}/**/*`, { force: true })
+  return del(`${buildDir}/**/*`, { force: true })
 }
 
 exports.build       = series(cleandest, scripts, html, styles, images, fonts);``
