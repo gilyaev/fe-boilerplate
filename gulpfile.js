@@ -25,14 +25,16 @@ function browsersync() {
 }
 
 function styles() {
-  return src(`${srcDir}/sass/*.scss`)
+  return src([`${srcDir}/sass/*.scss`, `${srcDir}/sass/pages/*.scss`])
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer({ overrideBrowserslist: ['last 10 versions'], grid: true }))
     .pipe(cleancss({ level: { 1: { specialComments: 0 } }, sourceMap: true }))
     .pipe(rename({ suffix: '.min' }))
     .pipe(sourcemaps.write())
-    .pipe(dest(`${destDir}/css`))
+    .pipe(dest((file) => {
+      return file.base.replace(`${srcDir}/sass`, `${destDir}/css`)
+    })) 
     .pipe(browserSync.stream());
 }
 
@@ -55,21 +57,25 @@ function images() {
 }
 
 function html() {
-  return src(`${srcDir}/*.html`)
+  return src([`${srcDir}/*.html`, `${srcDir}/pages/*.html`])
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(dest(`${destDir}`))
+    .pipe(dest((file) => {
+      return file.base
+        .replace(`${srcDir}/pages`, `${destDir}`)
+        .replace(`${srcDir}`, `${destDir}`);
+    })) 
     .pipe(browserSync.stream());
 }
 
 function fonts() {
-  return src(`${srcDir}/fonts/**/*.{ttf,woff,woff2,eot,svg}`)
+  return src(`${srcDir}/fonts/**/*.{ttf,woff,woff2,eot,svg}`, { base: "." })
     .pipe(dest(`${destDir}/fonts`));
 }
 
 function watchFiles() {
   watch(`${srcDir}/js/**/*.js`, scripts);
-  watch(`${srcDir}/*.html`, html);
-  watch(`${srcDir}/sass/*.scss`, styles);
+  watch(`${srcDir}/**/*.html`, html);
+  watch(`${srcDir}/sass/**/*.scss`, styles);
   watch(`${srcDir}/img/**/*`, images);
 }
 
@@ -84,8 +90,10 @@ function cleandest() {
 exports.build       = series(cleandest, scripts, html, styles, images, fonts);``
 exports.browsersync = browsersync;
 exports.images      = images;
+exports.html        = html;
 exports.scripts     = scripts;
 exports.styles      = styles;
 exports.cleanimg    = cleanimg;
 exports.fonts       = fonts;
+exports.cleandest   = cleandest;
 exports.start       = parallel(scripts, html, styles, images, browsersync, watchFiles);

@@ -10,6 +10,8 @@
     "scripts": "gulp scripts",
     "styles": "gulp styles",
     "cleanimg": "gulp cleanimg",
+    "html": "gulp html",
+    "cleandest": "gulp cleandest",
     "fonts": "gulp fonts"
   },
   "repository": {
