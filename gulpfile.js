@@ -69,7 +69,7 @@ function html() {
 }
 
 function fonts() {
-  return src(`${srcDir}/fonts/**/*.{ttf,woff,woff2,eot,svg}`, { base: "." })
+  return src(`${srcDir}/fonts/**/*.{ttf,woff,woff2,eot,svg}`)
     .pipe(dest(`${buildDir}/fonts`));
 }
 
@@ -88,7 +88,7 @@ function cleandest() {
   return del(`${buildDir}/**/*`, { force: true })
 }
 
-exports.build       = series(cleandest, scripts, html, styles, images, fonts);``
+exports.build       = series(cleandest, scripts, html, styles, images, fonts);
 exports.browsersync = browsersync;
 exports.images      = images;
 exports.html        = html;
@@ -97,4 +97,4 @@ exports.styles      = styles;
 exports.cleanimg    = cleanimg;
 exports.fonts       = fonts;
 exports.cleandest   = cleandest;
-exports.start       = parallel(scripts, html, styles, images, browsersync, watchFiles);
+exports.start       = parallel(scripts, html, styles, images, fonts, browsersync, watchFiles);
