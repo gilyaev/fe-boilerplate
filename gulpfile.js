@@ -12,6 +12,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const cleancss     = require('gulp-clean-css');
 const del          = require('del');
 const sourcemaps   = require('gulp-sourcemaps');
+const path         = require('path');
 
 const srcDir = "src";
 const buildDir = "build";
@@ -33,7 +34,7 @@ function styles() {
     .pipe(rename({ suffix: '.min' }))
     .pipe(sourcemaps.write())
     .pipe(dest((file) => {
-      return file.base.replace(`${srcDir}/sass`, `${buildDir}/css`)
+      return file.base.replace(`${srcDir}${path.sep}sass`, `${buildDir}${path.sep}css`)
     })) 
     .pipe(browserSync.stream());
 }
@@ -61,7 +62,7 @@ function html() {
     .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(dest((file) => {
       return file.base
-        .replace(`${srcDir}/pages`, `${buildDir}`)
+        .replace(`${srcDir}${path.sep}pages`, `${buildDir}`)
         .replace(`${srcDir}`, `${buildDir}`);
     })) 
     .pipe(browserSync.stream());
